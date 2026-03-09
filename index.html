@@ -51,6 +51,10 @@
     }
     .breakpoint-btns button:hover { background: var(--bg-light); }
     .breakpoint-btns button.active { background: var(--ws-blue); color: #fff; border-color: var(--ws-blue); }
+    .breakpoint-btns button { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .breakpoint-btns .btn-width { font-weight: 600; }
+    .breakpoint-btns .btn-device { font-size: 10px; opacity: 0.8; }
+    .breakpoint-btns button.active .btn-device { opacity: 1; }
     .preview-frame {
       border: none;
       border-radius: var(--card-radius);
@@ -154,13 +158,13 @@
       <h2>Responsive Preview</h2>
       <p>Use these buttons to preview components at different viewport widths. The preview shows inside a phone frame (or tablet frame at 768px) so you can see how Olive components look on real devices.</p>
       <div class="breakpoint-btns" id="breakpoint-btns">
-        <button data-width="320">320px</button>
-        <button data-width="360">360px</button>
-        <button data-width="375">375px</button>
-        <button data-width="393">393px</button>
-        <button data-width="412">412px</button>
-        <button data-width="430">430px</button>
-        <button data-width="768">768px</button>
+        <button data-width="320"><span class="btn-width">320px</span><span class="btn-device">iPhone SE</span></button>
+        <button data-width="360"><span class="btn-width">360px</span><span class="btn-device">Galaxy S8</span></button>
+        <button data-width="375"><span class="btn-width">375px</span><span class="btn-device">iPhone 8 / X</span></button>
+        <button data-width="393"><span class="btn-width">393px</span><span class="btn-device">iPhone 14 Pro</span></button>
+        <button data-width="412"><span class="btn-width">412px</span><span class="btn-device">Pixel 5</span></button>
+        <button data-width="430"><span class="btn-width">430px</span><span class="btn-device">iPhone 14 Pro Max</span></button>
+        <button data-width="768"><span class="btn-width">768px</span><span class="btn-device">iPad</span></button>
       </div>
       <div class="preview-label">Preview frame (current width: <span id="current-width">375</span>px)</div>
       <div class="preview-frame" id="preview-frame" style="width: 399px;">
