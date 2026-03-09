@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WS Olive UI Component Specs | Developer Handoff</title>
+  <style>
+    :root {
+      --ws-blue: #1A56DB;
+      --text-primary: #1A1A1A;
+      --text-secondary: #666;
+      --border-color: #E0E0E0;
+      --bg-light: #F8F9FA;
+      --card-radius: 12px;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      color: var(--text-primary);
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+    .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+    h1 { font-size: 28px; font-weight: 700; margin: 0 0 8px; }
+    h2 { font-size: 22px; font-weight: 600; margin: 48px 0 16px; padding-top: 24px; border-top: 1px solid var(--border-color); }
+    h2:first-of-type { margin-top: 24px; padding-top: 0; border-top: none; }
+    h3 { font-size: 16px; font-weight: 600; margin: 24px 0 8px; color: var(--text-secondary); }
+    p { margin: 0 0 12px; color: var(--text-secondary); }
+    a { color: var(--ws-blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code { background: var(--bg-light); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+    th { font-weight: 600; background: var(--bg-light); }
+    .toc { background: var(--bg-light); padding: 20px; border-radius: var(--card-radius); margin: 24px 0; }
+    .toc ul { margin: 0; padding-left: 20px; }
+    .toc li { margin: 6px 0; }
+    .spec-table { margin: 16px 0; }
+    .breakpoint-btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+    .breakpoint-btns button {
+      padding: 8px 14px;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .breakpoint-btns button:hover { background: var(--bg-light); }
+    .breakpoint-btns button.active { background: var(--ws-blue); color: #fff; border-color: var(--ws-blue); }
+    .preview-frame {
+      border: none;
+      border-radius: var(--card-radius);
+      overflow: visible;
+      margin: 16px 0;
+      transition: width 0.2s ease;
+      background: transparent;
+    }
+    .device-frame {
+      background: #1a1a1a;
+      border-radius: 32px;
+      padding: 12px;
+      margin: 0 auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .device-frame--tablet {
+      border-radius: 24px;
+      padding: 20px;
+    }
+    .device-frame::before {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 20px;
+      background: #0d0d0d;
+      border-radius: 0 0 12px 12px;
+      margin: -12px auto 8px;
+      position: relative;
+      z-index: 1;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+    }
+    .device-frame--tablet::before {
+      width: 100px;
+      height: 8px;
+      border-radius: 0 0 8px 8px;
+      margin: -20px auto 12px;
+    }
+    .device-screen {
+      background: #fff;
+      border-radius: 20px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      min-height: 400px;
+    }
+    .device-frame--tablet .device-screen {
+      border-radius: 12px;
+    }
+    .device-screen::after {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 4px;
+      background: #333;
+      border-radius: 2px;
+      margin: 12px auto;
+    }
+    .device-frame--tablet .device-screen::after {
+      display: none;
+    }
+    .preview-inner { padding: 16px; }
+    .preview-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+    .dimension-annotate { font-size: 11px; color: var(--text-secondary); margin-top: 8px; }
+    .fix-list { list-style: none; padding: 0; margin: 0; }
+    .fix-list li { padding: 12px 0; border-bottom: 1px solid var(--border-color); display: flex; gap: 12px; align-items: flex-start; }
+    .fix-list li:last-child { border-bottom: none; }
+    .fix-list .icon { flex-shrink: 0; width: 24px; height: 24px; background: var(--ws-blue); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
+    pre { margin: 16px 0; }
+    .brand-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .brand-icon { width: 40px; height: 40px; background: #7C3AED; border-radius: 10px; }
+    .brand-text { font-size: 14px; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand-header">
+        <div class="brand-icon"></div>
+        <div>
+          <h1>WS Olive UI Component Specs</h1>
+          <p class="brand-text">ChatGPT integration • Developer handoff document • Williams-Sonoma</p>
+        </div>
+      </div>
+
+      <div class="toc">
+        <h3>Table of Contents</h3>
+        <ul>
+          <li><a href="#responsive-preview">Responsive Preview</a></li>
+          <li><a href="#recipe-card">Recipe Card</a></li>
+          <li><a href="#recipe-carousel">Recipe Card Carousel</a></li>
+          <li><a href="#product-card">Product Card</a></li>
+          <li><a href="#video-embed">Video Embed</a></li>
+          <li><a href="#guide-link">Guide Link Card</a></li>
+          <li><a href="#breakpoint-reference">Breakpoint Reference</a></li>
+          <li><a href="#known-issues">Known Issues & Fixes</a></li>
+        </ul>
+      </div>
+    </header>
+
+    <!-- Responsive Preview -->
+    <section id="responsive-preview">
+      <h2>Responsive Preview</h2>
+      <p>Use these buttons to preview components at different viewport widths. The preview shows inside a phone frame (or tablet frame at 768px) so you can see how Olive components look on real devices.</p>
+      <div class="breakpoint-btns" id="breakpoint-btns">
+        <button data-width="320">320px</button>
+        <button data-width="360">360px</button>
+        <button data-width="375">375px</button>
+        <button data-width="393">393px</button>
+        <button data-width="412">412px</button>
+        <button data-width="430">430px</button>
+        <button data-width="768">768px</button>
+      </div>
+      <div class="preview-label">Preview frame (current width: <span id="current-width">375</span>px)</div>
+      <div class="preview-frame" id="preview-frame" style="width: 399px;">
+        <div class="device-frame" id="device-wrapper">
+          <div class="device-screen" id="device-screen" style="width: 375px;">
+            <div class="preview-inner" id="preview-inner">
+              <p style="margin:0;color:#666;">Select a breakpoint to preview components.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recipe Card -->
+    <section id="recipe-card">
+      <h2>Recipe Card</h2>
+      <p>Card used in recipe carousels. Contains image, title, metadata (prep/cook/serves), description snippet, and "View Recipe" CTA.</p>
+
+      <h3>Live Example</h3>
+      <div class="preview-frame" style="width: 300px;">
+        <div class="preview-inner">
+          <div class="olive-recipe-card" style="width: 276px;">
+            <div class="olive-card-image" style="background: linear-gradient(135deg, #E8D5C4 0%, #D4B896 100%); height: 184px; border-radius: 12px 12px 0 0;"></div>
+            <div class="olive-card-body">
+              <div class="olive-card-title">Spaghetti with Meatballs</div>
+              <div class="olive-card-meta">
+                <span>Prep: 30 min</span>
+                <span>Cook: 30 min</span>
+                <span>Serves: 4</span>
+              </div>
+              <div class="olive-card-desc">Fresh marjoram has a delicate floral flavor that lends beautifully to many Italian dishes.</div>
+              <button class="olive-cta">View Recipe</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dimension-annotate">Card: 276px wide (300px container − 24px padding) • Image: 3:2 aspect (184px) • Border: 1px solid #E0E0E0</div>
+
+      <h3>CSS Spec Table</h3>
+      <table class="spec-table">
+        <thead><tr><th>Property</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Card width</td><td>fluid per breakpoint</td><td>See Breakpoint Reference</td></tr>
+          <tr><td>border</td><td>1px solid #E0E0E0</td><td>Crisp edge, no box-shadow blur</td></tr>
+          <tr><td>border-radius</td><td>12px</td><td>With overflow: hidden</td></tr>
+          <tr><td>Image aspect-ratio</td><td>3:2</td><td>object-fit: cover</td></tr>
+          <tr><td>Image border-radius</td><td>12px 12px 0 0</td><td>Top corners only</td></tr>
+          <tr><td>Title font-size</td><td>16px</td><td>font-weight: 600, line-clamp: 2</td></tr>
+          <tr><td>Metadata font-size</td><td>13px</td><td>color: #666, gap: 12px</td></tr>
+          <tr><td>Description font-size</td><td>13px</td><td>color: #666, line-clamp: 2</td></tr>
+          <tr><td>CTA height</td><td>40px</td><td>border-radius: 8px, background: #1A56DB</td></tr>
+          <tr><td>Card padding</td><td>0 12px 12px</td><td>0 top (image bleeds)</td></tr>
+          <tr><td>Gap between cards</td><td>12px</td><td>In carousel</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Recipe Card Carousel -->
+    <section id="recipe-carousel">
+      <h2>Recipe Card Carousel</h2>
+      <p>Horizontal scrollable container for recipe cards. Uses scroll-snap, hidden scrollbar, touch-friendly swipe.</p>
+
+      <h3>Live Example</h3>
+      <div class="olive-carousel-container">
+        <div class="olive-carousel">
+          <div class="olive-recipe-card olive-carousel-card">
+            <div class="olive-card-image" style="background: linear-gradient(135deg, #E8D5C4 0%, #D4B896 100%); height: 120px;"></div>
+            <div class="olive-card-body">
+              <div class="olive-card-title">Spaghetti with Meatballs</div>
+              <div class="olive-card-meta"><span>Prep: 30 min</span><span>Cook: 30 min</span><span>Serves: 4</span></div>
+              <button class="olive-cta">View Recipe</button>
+            </div>
+          </div>
+          <div class="olive-recipe-card olive-carousel-card">
+            <div class="olive-card-image" style="background: linear-gradient(135deg, #C4E8D5 0%, #96D4B8 100%); height: 120px;"></div>
+            <div class="olive-card-body">
+              <div class="olive-card-title">Spaghetti with Turkey Meatballs</div>
+              <div class="olive-card-meta"><span>Prep: 20 min</span><span>Cook: 40 min</span><span>Serves: 6</span></div>
+              <button class="olive-cta">View Recipe</button>
+            </div>
+          </div>
+          <div class="olive-recipe-card olive-carousel-card">
+            <div class="olive-card-image" style="background: linear-gradient(135deg, #D5C4E8 0%, #B896D4 100%); height: 120px;"></div>
+            <div class="olive-card-body">
+              <div class="olive-card-title">Spaghetti with Stuffed Meatballs</div>
+              <div class="olive-card-meta"><span>Prep: 15 min</span><span>Cook: 60 min</span><span>Serves: 10</span></div>
+              <button class="olive-cta">View Recipe</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dimension-annotate">Scrollbar hidden • scroll-snap-type: x mandatory • -webkit-overflow-scrolling: touch</div>
+
+      <h3>CSS Spec Table</h3>
+      <table class="spec-table">
+        <thead><tr><th>Property</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>overflow-x</td><td>auto</td><td>Horizontal scroll</td></tr>
+          <tr><td>overflow-y</td><td>hidden</td><td>No vertical overflow</td></tr>
+          <tr><td>scrollbar-width</td><td>none</td><td>Hide scrollbar (Firefox)</td></tr>
+          <tr><td>::-webkit-scrollbar</td><td>display: none</td><td>Hide scrollbar (Chrome/Safari)</td></tr>
+          <tr><td>scroll-snap-type</td><td>x mandatory</td><td>On container</td></tr>
+          <tr><td>scroll-snap-align</td><td>start</td><td>On each card</td></tr>
+          <tr><td>-webkit-overflow-scrolling</td><td>touch</td><td>Smooth iOS scrolling</td></tr>
+          <tr><td>Nav arrows</td><td>32px circles</td><td>Hidden on mobile (&lt;768px)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Product Card -->
+    <section id="product-card">
+      <h2>Product Card</h2>
+      <p>Same structure as Recipe Card, with product name, price, and "View Product" CTA. Used in product carousels.</p>
+
+      <h3>Live Example</h3>
+      <div class="preview-frame" style="width: 300px;">
+        <div class="preview-inner">
+          <div class="olive-product-card" style="width: 276px;">
+            <div class="olive-card-image" style="background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%); height: 184px; border-radius: 12px 12px 0 0;"></div>
+            <div class="olive-card-body">
+              <div class="olive-card-title">Williams Sonoma Stainless-Steel Nylon Pasta Claw</div>
+              <div class="olive-card-price">$27.95</div>
+              <div class="olive-card-desc">Designed for easy tossing and serving pasta without burning your hands.</div>
+              <button class="olive-cta olive-cta-dark">View Product</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dimension-annotate">Same dimensions as Recipe Card • Price: 16px, font-weight 700</div>
+
+      <h3>CSS Spec Table</h3>
+      <table class="spec-table">
+        <thead><tr><th>Property</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Card dimensions</td><td>Same as Recipe Card</td><td>Per breakpoint</td></tr>
+          <tr><td>Price font-size</td><td>16px</td><td>font-weight: 700, color: #1A1A1A</td></tr>
+          <tr><td>CTA text</td><td>View Product</td><td>Dark button (background: #1A1A1A)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Video Embed -->
+    <section id="video-embed">
+      <h2>Video Embed</h2>
+      <p>YouTube or similar video player. Must maintain 16:9 aspect ratio on all screen sizes. No scrollbar, no overflow.</p>
+
+      <h3>Live Example</h3>
+      <div class="olive-video-container" style="max-width: 400px;">
+        <div class="olive-video-wrapper">
+          <div class="olive-video-placeholder" style="background: #1a1a1a; color: #666; display: flex; align-items: center; justify-content: center; font-size: 14px;">16:9 Video</div>
+        </div>
+        <div class="olive-video-title">How to Make Homemade Fresh Pasta</div>
+      </div>
+      <h3>Recommended iframe structure</h3>
+      <pre style="background: var(--bg-light); padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px;"><code>&lt;div class="olive-video-wrapper" style="aspect-ratio: 16/9; overflow: hidden; border-radius: 12px;"&gt;
+  &lt;iframe src="https://www.youtube.com/embed/VIDEO_ID" 
+    width="100%" height="100%" 
+    frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/div&gt;</code></pre>
+      <div class="dimension-annotate">aspect-ratio: 16/9 • width: 100% • overflow: hidden • Title margin-top: 8px</div>
+
+      <h3>CSS Spec Table</h3>
+      <table class="spec-table">
+        <thead><tr><th>Property</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Container width</td><td>100%</td><td>max-width: 100% of message area</td></tr>
+          <tr><td>aspect-ratio</td><td>16 / 9</td><td>Use aspect-ratio CSS or padding-bottom: 56.25%</td></tr>
+          <tr><td>border-radius</td><td>12px</td><td>overflow: hidden</td></tr>
+          <tr><td>iframe</td><td>width: 100%; height: 100%</td><td>Inside aspect-ratio container</td></tr>
+          <tr><td>Title font-size</td><td>16px</td><td>font-weight: 600, margin-top: 8px</td></tr>
+          <tr><td>320px screen</td><td>video width 288px</td><td>320 − 32px padding</td></tr>
+          <tr><td>375px screen</td><td>video width 343px</td><td>375 − 32px</td></tr>
+          <tr><td>430px screen</td><td>video width 398px</td><td>430 − 32px</td></tr>
+          <tr><td>768px screen</td><td>100%</td><td>max ~640px message column</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Guide Link Card -->
+    <section id="guide-link">
+      <h2>Guide Link Card</h2>
+      <p>Simple clickable card with text label and right arrow. Links to Williams-Sonoma guides.</p>
+
+      <h3>Live Example</h3>
+      <div class="preview-frame" style="width: 360px;">
+        <div class="preview-inner">
+          <a href="#" class="olive-guide-card">
+            <span>Pasta Guide</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#" class="olive-guide-card" style="margin-top: 8px;">
+            <span>How to Make Homemade Fresh Pasta</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="dimension-annotate">Height: 48px • Padding: 0 16px • Border: 1px solid #E0E0E0</div>
+
+      <h3>CSS Spec Table</h3>
+      <table class="spec-table">
+        <thead><tr><th>Property</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>height</td><td>48px</td><td>Fixed</td></tr>
+          <tr><td>border</td><td>1px solid #E0E0E0</td><td>Crisp</td></tr>
+          <tr><td>border-radius</td><td>12px</td><td></td></tr>
+          <tr><td>padding</td><td>0 16px</td><td></td></tr>
+          <tr><td>Text font-size</td><td>15px</td><td>font-weight: 500</td></tr>
+          <tr><td>Arrow icon</td><td>16px</td><td>color: #666, right-aligned</td></tr>
+          <tr><td>width</td><td>100%</td><td>Of message area</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Breakpoint Reference -->
+    <section id="breakpoint-reference">
+      <h2>Breakpoint Reference</h2>
+      <p>Card widths and video widths at each breakpoint. Use these values for media queries or CSS custom properties.</p>
+      <table class="spec-table">
+        <thead>
+          <tr>
+            <th>Breakpoint</th>
+            <th>Card Width</th>
+            <th>Video Width</th>
+            <th>Cards Visible</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>320px</td><td>260px</td><td>288px</td><td>1 (full-width)</td></tr>
+          <tr><td>360px</td><td>280px</td><td>328px</td><td>1.2</td></tr>
+          <tr><td>375px</td><td>280px</td><td>343px</td><td>1.2</td></tr>
+          <tr><td>393px</td><td>300px</td><td>361px</td><td>1.3</td></tr>
+          <tr><td>412px</td><td>300px</td><td>380px</td><td>1.3</td></tr>
+          <tr><td>430px</td><td>300px</td><td>398px</td><td>1.4</td></tr>
+          <tr><td>768px</td><td>240px</td><td>100% (max 640px)</td><td>2–3</td></tr>
+        </tbody>
+      </table>
+      <h3>Responsive Strategy</h3>
+      <table class="spec-table">
+        <thead><tr><th>Tier</th><th>Breakpoints</th><th>Behavior</th></tr></thead>
+        <tbody>
+          <tr><td>Small phone</td><td>320px – 374px</td><td>Single card visible, full-width minus padding, swipe to see more</td></tr>
+          <tr><td>Standard phone</td><td>375px – 430px</td><td>1.2–1.5 cards visible (peek next), swipe carousel</td></tr>
+          <tr><td>Tablet</td><td>768px+</td><td>2–3 cards visible side by side</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Known Issues & Fixes -->
+    <section id="known-issues">
+      <h2>Known Issues & Fixes</h2>
+      <p>Developer checklist for addressing current production issues.</p>
+      <ul class="fix-list">
+        <li>
+          <span class="icon">1</span>
+          <div>
+            <strong>Blurred card edges</strong><br>
+            Replace <code>box-shadow</code> blur with crisp <code>border: 1px solid #E0E0E0</code>. Use <code>border-radius: 12px</code> with <code>overflow: hidden</code>. Serve @2x images for retina. Optionally add <code>image-rendering: -webkit-optimize-contrast</code>.
+          </div>
+        </li>
+        <li>
+          <span class="icon">2</span>
+          <div>
+            <strong>Cards not mobile-friendly</strong><br>
+            Switch from fixed-width to fluid widths per breakpoint. Use <code>calc(100vw - 32px)</code> or media-query values from Breakpoint Reference. Enable scroll-snap for clean swipe.
+          </div>
+        </li>
+        <li>
+          <span class="icon">3</span>
+          <div>
+            <strong>Video wrong size on mobile</strong><br>
+            Use <code>aspect-ratio: 16/9</code> container with <code>width: 100%</code>. Never set fixed pixel height on iframe. Add <code>max-width: 100%</code> to prevent overflow.
+          </div>
+        </li>
+        <li>
+          <span class="icon">4</span>
+          <div>
+            <strong>Unwanted scrollbar</strong><br>
+            Carousel: <code>scrollbar-width: none</code> and <code>::-webkit-scrollbar { display: none }</code>. Video: <code>overflow: hidden</code> with proper aspect-ratio container.
+          </div>
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- Olive component styles (for live examples) -->
+  <style>
+    .olive-recipe-card, .olive-product-card {
+      border: 1px solid #E0E0E0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      flex-shrink: 0;
+    }
+    .olive-card-image {
+      width: 100%;
+      aspect-ratio: 3/2;
+      object-fit: cover;
+    }
+    .olive-card-body { padding: 12px; }
+    .olive-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1A1A1A;
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .olive-card-meta {
+      font-size: 13px;
+      color: #666;
+      display: flex;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .olive-card-desc {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .olive-card-price {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1A1A1A;
+      margin-bottom: 8px;
+    }
+    .olive-cta {
+      width: 100%;
+      height: 40px;
+      border: none;
+      border-radius: 8px;
+      background: #1A56DB;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .olive-cta-dark { background: #1A1A1A; }
+    .olive-carousel-container { margin: 16px 0; overflow: hidden; }
+    .olive-carousel {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 8px;
+    }
+    .olive-carousel::-webkit-scrollbar { display: none; }
+    .olive-carousel-card {
+      scroll-snap-align: start;
+      width: 260px;
+      flex-shrink: 0;
+    }
+    .olive-video-container { margin: 16px 0; }
+    .olive-video-wrapper {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .olive-video-placeholder { width: 100%; height: 100%; }
+    .olive-video-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 8px;
+      color: #1A1A1A;
+    }
+    .olive-guide-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 48px;
+      padding: 0 16px;
+      border: 1px solid #E0E0E0;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #1A1A1A;
+      font-size: 15px;
+      font-weight: 500;
+      background: #fff;
+    }
+    .olive-guide-card svg { color: #666; flex-shrink: 0; }
+  </style>
+
+  <script>
+    (function() {
+      var btns = document.getElementById('breakpoint-btns');
+      var frame = document.getElementById('preview-frame');
+      var inner = document.getElementById('preview-inner');
+      var widthSpan = document.getElementById('current-width');
+      var widths = [320, 360, 375, 393, 412, 430, 768];
+
+      function setWidth(w) {
+        var deviceWrapper = document.getElementById('device-wrapper');
+        var screenEl = document.getElementById('device-screen');
+        screenEl.style.width = w + 'px';
+        deviceWrapper.className = 'device-frame' + (w >= 768 ? ' device-frame--tablet' : '');
+        frame.style.width = (w >= 768 ? w + 48 : w + 24) + 'px';
+        widthSpan.textContent = w;
+        btns.querySelectorAll('button').forEach(function(btn) {
+          btn.classList.toggle('active', parseInt(btn.dataset.width) === w);
+        });
+        var cardW = w <= 320 ? 260 : w <= 375 ? 280 : w < 768 ? 300 : 240;
+        var imgH = Math.round((cardW - 2) * 2 / 3);
+        var cardStyle = 'width:' + (cardW - 2) + 'px;';
+        var cards = [
+          '<div class="olive-recipe-card olive-carousel-card" style="' + cardStyle + '"><div class="olive-card-image" style="background:linear-gradient(135deg,#E8D5C4,#D4B896);height:' + imgH + 'px;"></div><div class="olive-card-body"><div class="olive-card-title">Spaghetti with Meatballs</div><div class="olive-card-meta"><span>Prep: 30 min</span><span>Cook: 30 min</span><span>Serves: 4</span></div><button class="olive-cta">View Recipe</button></div></div>',
+          '<div class="olive-recipe-card olive-carousel-card" style="' + cardStyle + '"><div class="olive-card-image" style="background:linear-gradient(135deg,#C4E8D5,#96D4B8);height:' + imgH + 'px;"></div><div class="olive-card-body"><div class="olive-card-title">Spaghetti with Turkey Meatballs</div><div class="olive-card-meta"><span>Prep: 20 min</span><span>Cook: 40 min</span><span>Serves: 6</span></div><button class="olive-cta">View Recipe</button></div></div>',
+          '<div class="olive-recipe-card olive-carousel-card" style="' + cardStyle + '"><div class="olive-card-image" style="background:linear-gradient(135deg,#D5C4E8,#B896D4);height:' + imgH + 'px;"></div><div class="olive-card-body"><div class="olive-card-title">Spaghetti with Stuffed Meatballs</div><div class="olive-card-meta"><span>Prep: 15 min</span><span>Cook: 60 min</span><span>Serves: 10</span></div><button class="olive-cta">View Recipe</button></div></div>',
+          '<div class="olive-product-card olive-carousel-card" style="' + cardStyle + '"><div class="olive-card-image" style="background:linear-gradient(135deg,#E0E0E0,#BDBDBD);height:' + imgH + 'px;"></div><div class="olive-card-body"><div class="olive-card-title">Stainless-Steel Nylon Pasta Claw</div><div class="olive-card-price">$27.95</div><button class="olive-cta olive-cta-dark">View Product</button></div></div>',
+          '<div class="olive-product-card olive-carousel-card" style="' + cardStyle + '"><div class="olive-card-image" style="background:linear-gradient(135deg,#D0D0D0,#A0A0A0);height:' + imgH + 'px;"></div><div class="olive-card-body"><div class="olive-card-title">Prep Tools Ultimate Kitchen Utensils, Set of 11</div><div class="olive-card-price">$259.95</div><button class="olive-cta olive-cta-dark">View Product</button></div></div>'
+        ];
+        var carouselHtml = '<div class="olive-carousel" style="padding:0;">' + cards.join('') + '</div>';
+        var videoHtml = '<div class="olive-video-container" style="margin-top:16px;"><div class="olive-video-wrapper"><div class="olive-video-placeholder" style="background:#1a1a1a;color:#666;display:flex;align-items:center;justify-content:center;font-size:12px;width:100%;height:100%;">16:9 Video</div></div><div class="olive-video-title">How to Make Homemade Fresh Pasta</div></div>';
+        var guideHtml = '<a href="#" class="olive-guide-card" style="margin-top:12px;display:flex;"><span>Pasta Guide</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>';
+        inner.innerHTML = carouselHtml + videoHtml + guideHtml + '<div class="dimension-annotate" style="margin-top:12px;">Viewport: ' + w + 'px • Card: ' + cardW + 'px • 5 cards • Swipe to see more</div>';
+      }
+
+      btns.querySelectorAll('button').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          setWidth(parseInt(btn.dataset.width));
+        });
+      });
+      setWidth(375);
+    })();
+  </script>
+</body>
+</html>
